@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  </head>
+  <body>
+    <div>
+      <p>Value: <span id="value">0</span></p>
+      <button id="button">Click me</button>
+      <button id="upgrade" style="display:none;">Upgrade (Cost: 10)</button>
+      <button id="autoclicker" style="display:none;">Autoclicker (Cost: 40)</button>
+    </div>
+    <script>
+      // Get the button, value, upgrade, and autoclicker elements
+      const button = document.getElementById("button");
+      const valueEl = document.getElementById("value");
+      const upgradeButton = document.getElementById("upgrade");
+      const autoclickerButton = document.getElementById("autoclicker");
+
+      // Initialize the value, increment amount, cost, and autoclicker values
+      let value = 0;
+      let incrementAmount = 1;
+      let cost = 10;
+      let autoclickerCost = 40;
+      let autoclickerCount = 0;
+      let autoclickerInterval;
+
+      // Add a click event listener to the button
+      button.addEventListener("click", () => {
+        // Increment the value by the current increment amount
+        value += incrementAmount;
+
+        // Update the text of the value element
+        valueEl.textContent = value.toString();
+
+        // Check if the value is greater than or equal to the cost
+        if (value >= cost) {
+          // Show the upgrade button
+          upgradeButton.style.display = "block";
+        }
+
+        // Check if the value is greater than or equal to the autoclicker cost and the autoclicker button is hidden
+        if (value >= autoclickerCost && autoclickerButton.style.display === "none") {
+          // Show the autoclicker button
+          autoclickerButton.style.display = "block";
+        }
+      });
+
+      // Add a click event listener to the upgrade button
+     	upgradeButton.addEventListener("click", () => {
+        // Subtract the cost from the value if the value is greater than or equal to the cost
+        if (value >= cost) {
+          value -= cost;
+
+          // Increase the increment amount by 1
+          incrementAmount += 1;
+
+          // Double the cost
+          cost *= 2;
+
+          // Update the text of the value element
+          valueEl.textContent = value.toString();
+
+          // Update the text of the upgrade button
+          upgradeButton.textContent = "Upgrade (Cost: " + cost + ")";
+
+          // Hide the upgrade button if the value is less than the cost
+          if (value < cost) {
+            upgradeButton.style.display = "none";
+          }
+        }
+      });
+      
+      	// Add a click event listener to the autoclicker button
+      	autoclickerButton.addEventListener("click", () => {
+  		if (value >= autoclickerCost) {
+    			value -= autoclickerCost;
+    			valueEl.textContent = value.toString();
+    			autoclickerCost *= 2;
+    			autoclickerCount++;
+    			autoclickerButton.textContent = "Autoclicker (Cost: " + autoclickerCost + ", Level: " + autoclickerCount + ")";
+    			autoclickerInterval = setInterval(() => {
+      				value += incrementAmount;
+      				valueEl.textContent = value.toString();
+    			}, 1000);
+  			}
+	});
+    </script>
+  </body>
+</html>
